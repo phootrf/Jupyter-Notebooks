@@ -1,7 +1,7 @@
 FROM openjdk:11.0.3-jdk
 
 RUN apt-get update
-RUN apt-get install -y python3-pip cron sudo
+RUN apt-get install -y python3-pip
 
 # add requirements.txt, written this way to gracefully ignore a missing file
 COPY . .
@@ -19,9 +19,6 @@ RUN unzip ijava-kernel.zip -d ijava-kernel \
   && cd ijava-kernel \
   && python3 install.py --sys-prefix
 
-# Setup RISE
-RUN pip3 install RISE
-
 # Set up the user environment
 
 ENV NB_USER jovyan
@@ -35,19 +32,9 @@ RUN adduser --disabled-password \
 
 COPY . $HOME
 RUN chown -R $NB_UID $HOME
-RUN echo "$NB_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
 
 USER $NB_USER
 
+# Launch the notebook server
 WORKDIR $HOME
-
-#==============================================================================================
-# Use the following command when running from binder
-# 
-CMD ["jupyter", "notebook", "--ip", "0.0.0.0"]  
-
-#==============================================================================================
-# Use the following command when running locally
-# 
-# CMD ["jupyter", "notebook", "--ip", "0.0.0.0", "--NotebookApp.token=''"]  
+CMD ["jupyter", "notebook", "--ip", "0.0.0.0"]
