@@ -21,7 +21,7 @@ RUN unzip ijava-kernel.zip -d ijava-kernel \
 
 # Set up the user environment
 
-ENV NB_USER jovyan
+ENV NB_USER rfl
 ENV NB_UID 1000
 ENV HOME /home/$NB_USER
 
